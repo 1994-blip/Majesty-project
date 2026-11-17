@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Majesty School – Activities & Outfits</title>
+<style>
+:root{
+  --navy:#17234a; --royal:#2a47a8; --gold:#e3a622; --mint:#2c9c83; --coral:#d9534f;
+  --bg:#f2f5fb; --card:#ffffff; --text:#17234a; --muted:#5b6585; --line:#d9deec;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1530; --card:#19224a; --text:#eef1fb; --muted:#a6afd0; --line:#2c3868; --royal:#7f98ff}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.55}
+header{background:var(--navy);color:#fff;padding:2.2rem 1.2rem 0}
+.wrap{max-width:1000px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:.9rem}
+.crest{width:54px;height:54px;flex:none}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.8rem,5vw,2.8rem);margin:0;line-height:1.1;letter-spacing:.01em}
+.tag{color:#c9d2f5;margin:.2rem 0 0}
+nav{display:flex;gap:.3rem;margin-top:1.6rem}
+nav button{flex:1;max-width:220px;background:transparent;color:#c9d2f5;border:0;border-bottom:4px solid transparent;
+  padding:.8rem 1rem;font:inherit;font-weight:600;cursor:pointer}
+nav button[aria-selected="true"]{color:#fff;border-color:var(--gold)}
+button:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{padding:1.6rem 1.2rem 3rem}
+.panel[hidden]{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.2rem}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--text);padding:.4rem .9rem;border-radius:99px;font:inherit;font-size:.92rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--royal);border-color:var(--royal);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.act{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--c);border-radius:10px;padding:1rem 1.1rem}
+.act h3{margin:0 0 .25rem;font-size:1.1rem}
+.act p{margin:.2rem 0 .6rem;color:var(--muted);font-size:.95rem}
+.meta{font-size:.88rem;font-weight:600}
+.meta span{display:block}
+.count{color:var(--muted);margin:0 0 .8rem}
+h2{font-family:Georgia,serif;margin:2rem 0 .8rem;font-size:1.5rem}
+h2:first-child{margin-top:0}
+.row{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:1.2rem}
+select{font:inherit;padding:.45rem .7rem;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text)}
+.outfit{display:flex;gap:1rem;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem}
+.outfit svg{width:92px;height:auto;flex:none}
+.outfit h3{margin:0 0 .3rem}
+.outfit ul{margin:0;padding-left:1.1rem;color:var(--muted);font-size:.93rem}
+.when{display:inline-block;background:var(--gold);color:#17234a;font-size:.8rem;font-weight:700;padding:.1rem .6rem;border-radius:99px;margin-bottom:.4rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:.65rem .8rem;text-align:left;border-bottom:1px solid var(--line);font-size:.93rem}
+th{background:var(--navy);color:#fff}
+tr:last-child td{border-bottom:0}
+.rules{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.3rem}
+.rules li{margin:.3rem 0}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 1rem 2rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg class="crest" viewBox="0 0 54 54" aria-hidden="true">
+        <path d="M27 3 49 11v18c0 12-9 19-22 23C14 48 5 41 5 29V11z" fill="#e3a622"/>
+        <path d="M14 33l3-12 5 6 5-9 5 9 5-6 3 12z" fill="#17234a"/>
+        <rect x="14" y="35" width="26" height="4" fill="#17234a"/>
+      </svg>
+      <div>
+        <h1>Majesty School</h1>
+        <p class="tag">Student activities and school outfits at a glance</p>
+      </div>
+    </div>
+    <nav role="tablist" aria-label="Sections">
+      <button role="tab" id="t-act" aria-selected="true" aria-controls="p-act">Activities</button>
+      <button role="tab" id="t-out" aria-selected="false" aria-controls="p-out">Outfits</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- ACTIVITIES -->
+  <section class="panel" id="p-act" role="tabpanel" aria-labelledby="t-act">
+    <div class="chips" id="chips" aria-label="Filter activities"></div>
+    <p class="count" id="count"></p>
+    <div class="grid" id="actGrid"></div>
+  </section>
+
+  <!-- OUTFITS -->
+  <section class="panel" id="p-out" role="tabpanel" aria-labelledby="t-out" hidden>
+    <div class="row">
+      <label for="who"><strong>Show outfits for</strong></label>
+      <select id="who">
+        <option value="girls">Girls</option>
+        <option value="boys">Boys</option>
+      </select>
+    </div>
+    <div class="grid" id="outGrid"></div>
+
+    <h2>Weekly outfit plan</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Day</th><th>Wear</th><th>Why</th></tr></thead>
+        <tbody id="week"></tbody>
+      </table>
+    </div>
+
+    <h2>Uniform rules</h2>
+    <ul class="rules" id="rules"></ul>
+  </section>
+</main>
+
+<footer>Sample content. Edit the <code>DATA</code> block in this file to match your school.</footer>
+
+<script>
+/* ===== EDIT YOUR SCHOOL'S INFORMATION HERE ===== */
+const DATA = {
+  activities: [
+    {name:"Football", cat:"Sports", day:"Sunday", time:"2:00 – 3:30 PM", place:"Main field", note:"Teams for every grade, friendly matches each month."},
+    {name:"Swimming", cat:"Sports", day:"Tuesday", time:"1:30 – 2:30 PM", place:"School pool", note:"Beginner and advanced groups."},
+    {name:"Basketball", cat:"Sports", day:"Wednesday", time:"2:00 – 3:00 PM", place:"Indoor court", note:"Practice and inter-class games."},
+    {name:"Art Studio", cat:"Arts", day:"Monday", time:"1:30 – 3:00 PM", place:"Art room", note:"Drawing, painting and clay work."},
+    {name:"School Choir", cat:"Arts", day:"Thursday", time:"1:30 – 2:30 PM", place:"Music hall", note:"Performs at the annual ceremony."},
+    {name:"Drama Club", cat:"Arts", day:"Tuesday", time:"2:00 – 3:30 PM", place:"Theatre", note:"Builds a short play every term."},
+    {name:"Robotics", cat:"Science & Tech", day:"Wednesday", time:"1:30 – 3:00 PM", place:"Lab 2", note:"Build and program small robots."},
+    {name:"Coding Club", cat:"Science & Tech", day:"Sunday", time:"1:30 – 2:30 PM", place:"Computer lab", note:"Games and websites for beginners."},
+    {name:"Science Fair Team", cat:"Science & Tech", day:"Thursday", time:"2:00 – 3:00 PM", place:"Lab 1", note:"Experiments for the yearly fair."},
+    {name:"Arabic Debate", cat:"Clubs", day:"Monday", time:"2:00 – 3:00 PM", place:"Room 12", note:"Public speaking and teamwork."},
+    {name:"Reading Circle", cat:"Clubs", day:"Thursday", time:"12:30 – 1:15 PM", place:"Library", note:"Read and discuss one book a month."},
+    {name:"Community Service", cat:"Clubs", day:"Friday", time:"Monthly", place:"Off campus", note:"Cleanups and donation drives."}
+  ],
+  colors: {"Sports":"#2c9c83","Arts":"#d9534f","Science & Tech":"#2a47a8","Clubs":"#e3a622"},
+  outfits: {
+    girls: [
+      {title:"Daily uniform", when:"Sunday – Thursday", shirt:"#ffffff", bottom:"#17234a", acc:"#e3a622", kind:"dress",
+        items:["White blouse with school badge","Navy skirt or trousers","Navy cardigan when cold","Black closed shoes"]},
+      {title:"PE kit", when:"On PE days", shirt:"#2a47a8", bottom:"#17234a", acc:"#ffffff", kind:"tee",
+        items:["Blue school T-shirt","Navy track pants","White sneakers","Hair tied back"]},
+      {title:"Winter outfit", when:"Dec – Feb", shirt:"#17234a", bottom:"#17234a", acc:"#e3a622", kind:"jacket",
+        items:["Navy school jacket","Gray scarf (optional)","Warm tights or trousers","Black shoes"]},
+      {title:"Ceremony day", when:"Special events", shirt:"#ffffff", bottom:"#e3a622", acc:"#17234a", kind:"dress",
+        items:["White blouse","Gold-trim navy blazer","Formal skirt or trousers","Polished black shoes"]}
+    ],
+    boys: [
+      {title:"Daily uniform", when:"Sunday – Thursday", shirt:"#ffffff", bottom:"#17234a", acc:"#e3a622", kind:"shirt",
+        items:["White shirt with school badge","Navy trousers","Navy sweater when cold","Black leather shoes"]},
+      {title:"PE kit", when:"On PE days", shirt:"#2a47a8", bottom:"#17234a", acc:"#ffffff", kind:"tee",
+        items:["Blue school T-shirt","Navy shorts or track pants","White sneakers","Sports socks"]},
+      {title:"Winter outfit", when:"Dec – Feb", shirt:"#17234a", bottom:"#17234a", acc:"#e3a622", kind:"jacket",
+        items:["Navy school jacket","White shirt underneath","Navy trousers","Black shoes"]},
+      {title:"Ceremony day", when:"Special events", shirt:"#ffffff", bottom:"#e3a622", acc:"#17234a", kind:"shirt",
+        items:["White shirt and school tie","Gold-trim navy blazer","Navy trousers","Polished black shoes"]}
+    ]
+  },
+  week: [
+    ["Sunday","Daily uniform","Regular class day"],
+    ["Monday","Daily uniform","Regular class day"],
+    ["Tuesday","PE kit","Swimming and PE lessons"],
+    ["Wednesday","Daily uniform","Regular class day"],
+    ["Thursday","PE kit or Daily uniform","Check your class PE schedule"]
+  ],
+  rules: [
+    "Every garment shows the school badge.",
+    "Clothes are clean, ironed and the right size.",
+    "Shoes are closed and dark; no heels.",
+    "Hair is neat. Long hair is tied back for PE and labs.",
+    "Jewelry is kept simple. No bright nail polish.",
+    "Write the student's name inside jackets and sweaters."
+  ]
+};
+/* ================================================= */
+
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* Tabs */
+const tabs = document.querySelectorAll('[role=tab]');
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => {
+    const on = x === t;
+    x.setAttribute('aria-selected', on);
+    $('#' + x.getAttribute('aria-controls')).hidden = !on;
+  });
+}));
+
+/* Activities */
+let current = 'All';
+const cats = ['All', ...Object.keys(DATA.colors)];
+function drawChips(){
+  $('#chips').innerHTML = cats.map(c =>
+    `<button class="chip" aria-pressed="${c === current}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+  $('#chips').querySelectorAll('.chip').forEach(b => b.onclick = () => { current = b.dataset.c; drawChips(); drawActs(); });
+}
+function drawActs(){
+  const list = DATA.activities.filter(a => current === 'All' || a.cat === current);
+  $('#count').textContent = `${list.length} ${list.length === 1 ? 'activity' : 'activities'}`;
+  $('#actGrid').innerHTML = list.map(a => `
+    <article class="act" style="--c:${DATA.colors[a.cat]}">
+      <h3>${esc(a.name)}</h3>
+      <p>${esc(a.note)}</p>
+      <div class="meta"><span>${esc(a.day)}, ${esc(a.time)}</span><span>${esc(a.place)}</span></div>
+    </article>`).join('');
+}
+
+/* Outfit drawings */
+function garment(o){
+  const s = o.shirt, b = o.bottom, a = o.acc, edge = '#8a93b5';
+  const shapes = {
+    tee:    `<path d="M22 6h36l14 12-8 10-6-4v22H22V24l-6 4-8-10z" fill="${s}" stroke="${edge}"/>`,
+    shirt:  `<path d="M22 6l18 8 18-8 14 12-8 10-6-4v24H22V24l-6 4-8-10z" fill="${s}" stroke="${edge}"/><path d="M40 14v44" stroke="${edge}"/><circle cx="40" cy="26" r="2" fill="${a}"/>`,
+    jacket: `<path d="M20 6l20 8 20-8 14 14-6 36H12L6 20z" fill="${s}" stroke="${edge}"/><path d="M40 14v42" stroke="${a}" stroke-width="2"/>`,
+    dress:  `<path d="M22 6l18 8 18-8 12 12-8 8-4-3v21H22V23l-4 3-8-8z" fill="${s}" stroke="${edge}"/><circle cx="40" cy="26" r="2" fill="${a}"/>`
+  };
+  return `<svg viewBox="0 0 80 120" role="img" aria-label="${esc(o.title)} illustration">
+    ${shapes[o.kind]}
+    <path d="M22 58h36l4 50H42l-2-26-2 26H18z" fill="${b}" stroke="${edge}"/>
+    <rect x="22" y="56" width="36" height="4" fill="${a}"/></svg>`;
+}
+function drawOutfits(){
+  const who = $('#who').value;
+  $('#outGrid').innerHTML = DATA.outfits[who].map(o => `
+    <article class="outfit">
+      ${garment(o)}
+      <div><span class="when">${esc(o.when)}</span><h3>${esc(o.title)}</h3>
+      <ul>${o.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>
+    </article>`).join('');
+}
+$('#who').addEventListener('change', drawOutfits);
+
+$('#week').innerHTML = DATA.week.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('');
+$('#rules').innerHTML = DATA.rules.map(r => `<li>${esc(r)}</li>`).join('');
+
+drawChips(); drawActs(); drawOutfits();
+</script>
+</body>
+</html>
